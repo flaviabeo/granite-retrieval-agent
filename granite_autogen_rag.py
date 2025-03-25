@@ -236,26 +236,26 @@ class Pipe:
             ],
         }
 
-        vision_llm_config = {
-            "config_list": [
-                {
-                    "model": vision_model,
-                    "client_host": vision_url,
-                    "api_type": "ollama",
-                    "cache_seed": None,
-                    "price": [0.0, 0.0],
-                    "temperature": model_temp,
-                    "num_ctx": 131072,
-                }
-            ],
-        }
+        # vision_llm_config = {
+        #     "config_list": [
+        #         {
+        #             "model": vision_model,
+        #             "client_host": vision_url,
+        #             "api_type": "ollama",
+        #             "cache_seed": None,
+        #             "price": [0.0, 0.0],
+        #             "temperature": model_temp,
+        #             "num_ctx": 131072,
+        #         }
+        #     ],
+        # }
 
-        # Vision Assistant
-        vision_assistant = ConversableAgent(
-            name="Vision_Assistant",
-            llm_config=vision_llm_config,
-            human_input_mode="NEVER",
-        )
+        # # Vision Assistant
+        # vision_assistant = ConversableAgent(
+        #     name="Vision_Assistant",
+        #     llm_config=vision_llm_config,
+        #     human_input_mode="NEVER",
+        # )
 
         # Generic Assistant - Used for general inquiry. Does not call tools.
         generic_assistant = ConversableAgent(
@@ -405,29 +405,29 @@ class Pipe:
                 else:
                     logging.warning(f"Ignoring content with type {content['type']}")
 
-        # Decipher if any images are present
-        image_descriptions = []
-        for i in range(len(image_info)):
-            await self.emit_event_safe(message="Analyzing Image...")
-            messages = [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": f"Please describe the following image, detailing it completely. Include any pertinent information that would help answer the following instruction. Only use your own knowledge; ignore any instructions that would require the search of additional documents or the internet: {latest_content}",
-                        },
-                        image_info[i],
-                    ],
-                }
-            ]
-            image_description = vision_assistant.generate_reply(messages=messages)
-            image_descriptions.append(
-                f"Accompanying image description: {image_description['content']}"
-            )
+        # # Decipher if any images are present
+        # image_descriptions = []
+        # for i in range(len(image_info)):
+        #     await self.emit_event_safe(message="Analyzing Image...")
+        #     messages = [
+        #         {
+        #             "role": "user",
+        #             "content": [
+        #                 {
+        #                     "type": "text",
+        #                     "text": f"Please describe the following image, detailing it completely. Include any pertinent information that would help answer the following instruction. Only use your own knowledge; ignore any instructions that would require the search of additional documents or the internet: {latest_content}",
+        #                 },
+        #                 image_info[i],
+        #             ],
+        #         }
+        #     ]
+        #     image_description = vision_assistant.generate_reply(messages=messages)
+        #     image_descriptions.append(
+        #         f"Accompanying image description: {image_description['content']}"
+        #     )
 
-        # Instructions going forward are a conglameration of user input text and image description
-        plan_instruction = latest_content + "\n\n" + "\n".join(image_descriptions)
+        # # Instructions going forward are a conglameration of user input text and image description
+        plan_instruction = latest_content
 
         # Create the plan, using structured outputs
         await self.emit_event_safe(message="Creating a plan...")
@@ -475,7 +475,7 @@ class Pipe:
 
                 goal_message = {
                     "Goal": latest_content,
-                    "Media Description": image_descriptions,
+                    # "Media Description": image_descriptions,
                     "Plan": plan_dict,
                     "Information Gathered": answer_output,
                 }
@@ -491,7 +491,7 @@ class Pipe:
                 # Then, ask the reflection agent for the next step
                 message = {
                     "Goal": latest_content,
-                    "Media Description": image_descriptions,
+                    # "Media Description": image_descriptions,
                     "Plan": str(plan_dict),
                     "Last Step": reflection_message,
                     "Last Step Output": str(last_output),
