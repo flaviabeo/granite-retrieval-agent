@@ -2,7 +2,7 @@
 
 use_default_settings: true 
 server: 
-   secret_key: "ultrasecretkey" # change this! 
+   secret_key: "mysecretkey" # change this! 
    limiter: false 
    image_proxy: true 
    port: 8080 
