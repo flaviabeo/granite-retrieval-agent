@@ -1,5 +1,7 @@
 # Granite Retrieval and Image Research Agents
 
+## TDC Summit SP 2025 Workshop Tutorial [Download PDF here](https://ugc.production.linktr.ee/ff60dc20-d861-442c-ba1c-747128bcfa3b_TDC-SP---Open-Source-Agentic-RAG.pdf)
+
 ## 🚀 New Feature as of 2/26/25
 
 We’ve added a new example alongside the **Granite Retrieval Agent**: an **Image Research Agent**. This agent leverages the **Granite 3.2 language model** and **Granite 3.2 vision** to analyze images. It breaks down an image into components and dispatches parallel, asynchronous agents for detailed research. This implementation uses the **CrewAI framework**, demonstrating a unique approach to agentic workflows.
